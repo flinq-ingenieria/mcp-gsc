@@ -1,0 +1,91 @@
+{
+  "$schema": "https://raw.githubusercontent.com/anthropics/mcpb/main/schemas/mcpb-manifest-v0.4.schema.json",
+  "manifest_version": "0.4",
+  "name": "mcp-search-console",
+  "display_name": "Google Search Console",
+  "version": "0.4.1",
+  "description": "Query Google Search Console from Claude: search analytics, URL inspection, indexing audits and sitemaps.",
+  "long_description": "Connects Claude Desktop to Google Search Console. Query clicks, impressions, CTR and positions with filters and period comparisons, inspect URLs and audit indexing in batches, and manage sitemaps. Sign in with a service account key, or with an OAuth client file: the first OAuth use opens a browser window for Google login and the token is kept in your user config folder. Adding or deleting properties and sitemaps stays disabled unless you enable it.",
+  "author": {
+    "name": "Amin Foroutan",
+    "url": "https://advancedgsc.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flinq-ingenieria/mcp-gsc.git"
+  },
+  "homepage": "https://github.com/flinq-ingenieria/mcp-gsc",
+  "documentation": "https://github.com/flinq-ingenieria/mcp-gsc#readme",
+  "support": "https://github.com/flinq-ingenieria/mcp-gsc/issues",
+  "license": "MIT",
+  "keywords": ["seo", "google-search-console", "analytics", "mcp", "gsc"],
+  "server": {
+    "type": "uv",
+    "entry_point": "gsc_server.py",
+    "mcp_config": {
+      "command": "uv",
+      "args": ["run", "--directory", "${__dirname}", "--no-dev", "mcp-search-console"],
+      "env": {
+        "GSC_CREDENTIALS_PATH": "${user_config.credentials_path}",
+        "GSC_OAUTH_CLIENT_SECRETS_FILE": "${user_config.oauth_client_secrets_file}",
+        "GSC_DATA_STATE": "${user_config.data_state}",
+        "GSC_ALLOW_DESTRUCTIVE": "${user_config.allow_destructive}"
+      }
+    }
+  },
+  "user_config": {
+    "credentials_path": {
+      "type": "file",
+      "title": "Service account key",
+      "description": "JSON key of a Google service account that has access to your Search Console properties. Use this or an OAuth client file.",
+      "default": ""
+    },
+    "oauth_client_secrets_file": {
+      "type": "file",
+      "title": "OAuth client file",
+      "description": "client_secrets.json of a Google OAuth desktop client. The first use opens a browser window to sign in. Use this or a service account key.",
+      "default": ""
+    },
+    "data_state": {
+      "type": "string",
+      "title": "Data state",
+      "description": "all matches the Search Console dashboard (includes fresh data); final returns only confirmed data, 2-3 days behind.",
+      "default": "all"
+    },
+    "allow_destructive": {
+      "type": "boolean",
+      "title": "Allow destructive operations",
+      "description": "Enable add_site, delete_site and delete_sitemap.",
+      "default": false
+    }
+  },
+  "tools": [
+    {"name": "get_capabilities", "description": "Get a full list of all available tools, current auth status, and how to get started."},
+    {"name": "list_properties", "description": "List all Google Search Console (GSC) properties and sites the user has access to."},
+    {"name": "add_site", "description": "Add a site to your Search Console properties."},
+    {"name": "delete_site", "description": "Remove a site from your Search Console properties."},
+    {"name": "get_search_analytics", "description": "Get search analytics data for a specific property."},
+    {"name": "get_site_details", "description": "Get detailed information about a specific Search Console property."},
+    {"name": "get_sitemaps", "description": "List all sitemaps for a specific Search Console property."},
+    {"name": "inspect_url_enhanced", "description": "Enhanced URL inspection to check indexing status and rich results in Google."},
+    {"name": "batch_url_inspection", "description": "Inspect multiple URLs in batch (within API limits)."},
+    {"name": "check_indexing_issues", "description": "Check for specific indexing issues across multiple URLs."},
+    {"name": "get_performance_overview", "description": "Get a performance overview for a specific property."},
+    {"name": "get_advanced_search_analytics", "description": "Get advanced search analytics data with sorting, filtering, and pagination."},
+    {"name": "compare_search_periods", "description": "Compare search analytics data between two time periods."},
+    {"name": "get_search_by_page_query", "description": "Get search analytics data for a specific page, broken down by query."},
+    {"name": "list_sitemaps_enhanced", "description": "List all sitemaps for a specific Search Console property with detailed information."},
+    {"name": "get_sitemap_details", "description": "Get detailed information about a specific sitemap."},
+    {"name": "submit_sitemap", "description": "Submit a new sitemap or resubmit an existing one to Google."},
+    {"name": "delete_sitemap", "description": "Delete (unsubmit) a sitemap from Google Search Console."},
+    {"name": "manage_sitemaps", "description": "All-in-one tool to manage sitemaps (list, get details, submit, delete)."},
+    {"name": "get_creator_info", "description": "Provides information about Amin Foroutan, the creator of the MCP-GSC tool."},
+    {"name": "reauthenticate", "description": "Perform a logout and new login sequence."}
+  ],
+  "compatibility": {
+    "platforms": ["darwin", "linux", "win32"],
+    "runtimes": {
+      "python": ">=3.11"
+    }
+  }
+}
